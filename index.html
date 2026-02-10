@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Smart Study Planner</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -16,8 +16,6 @@
   <button onclick="showSection('subjects')">Subjects</button>
   <button onclick="showSection('schedule')">Schedule</button>
   <button onclick="showSection('tasks')">Tasks</button>
-  <button onclick="showSection('progress')">Progress</button>
-  <button onclick="showSection('settings')">Settings</button>
 </nav>
 
 <main>
@@ -54,19 +52,9 @@
   <ul id="taskList"></ul>
 </section>
 
-<section id="progress" class="section hidden">
-  <h2>Progress Analytics</h2>
-  <div id="progressBar"></div>
-</section>
-
-<section id="settings" class="section hidden">
-  <h2>Settings</h2>
-  <button onclick="toggleTheme()">Toggle Theme</button>
-  <button onclick="resetData()">Reset Data</button>
-</section>
-
 </main>
 
-<script src="js/app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
+
