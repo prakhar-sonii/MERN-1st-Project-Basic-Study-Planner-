@@ -30,3 +30,6 @@ A web-based application designed to help students organize their study schedules
 - Implement full rendering logic for the Task Manager.
 - Add visual charts for Progress Analytics.
 - Implement time validation for the Schedule Planner.
+
+## Live Link
+- https://prakhar-sonii.github.io/MERN-1st-Project-Basic-Study-Planner-/
