@@ -20,6 +20,7 @@ function renderSubjects() {
   list.innerHTML = "";
   subjects.forEach((s, i) => {
     list.innerHTML += `<li>${s.name} (${s.priority})
+      <button onclick="deleteSubject(${i})">❌</button></li>`;
   });
 }
 
@@ -37,6 +38,13 @@ function addTask() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
+
+function resetData() {
+  localStorage.clear();
+  location.reload();
+}
 
 renderSubjects();
-
