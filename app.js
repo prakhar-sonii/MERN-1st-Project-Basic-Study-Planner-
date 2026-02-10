@@ -76,9 +76,6 @@
   const exportDataBtn = document.getElementById("exportDataBtn");
   const resetDataBtn = document.getElementById("resetDataBtn");
 
-  // =====================
-  // Toast Notifications
-  // =====================
   function showToast(message, type) {
     if (type === undefined) type = "success";
     var toast = document.createElement("div");
@@ -93,9 +90,6 @@
     }, 3000);
   }
 
-  // =====================
-  // Navigation
-  // =====================
   const sectionTitles = {
     dashboard: "Dashboard",
     subjects: "Subjects",
@@ -126,10 +120,8 @@
 
     pageTitle.textContent = sectionTitles[sectionName] || sectionName;
 
-    // Close sidebar on mobile
     sidebar.classList.remove("open");
 
-    // Refresh section data
     if (sectionName === "dashboard") refreshDashboard();
     if (sectionName === "subjects") renderSubjects();
     if (sectionName === "schedule") renderSchedule();
@@ -143,7 +135,6 @@
     });
   });
 
-  // Sidebar toggle (mobile)
   menuToggle.addEventListener("click", function () {
     sidebar.classList.toggle("open");
   });
@@ -152,25 +143,19 @@
     sidebar.classList.remove("open");
   });
 
-  // Close sidebar on outside click (mobile)
   mainContent.addEventListener("click", function () {
     if (sidebar.classList.contains("open")) {
       sidebar.classList.remove("open");
     }
   });
 
-  // =====================
-  // Modal
-  // =====================
   function openModal(title, bodyHTML, footerHTML) {
     modalTitle.textContent = title;
     modalBody.innerHTML = bodyHTML;
     modalFooter.innerHTML = footerHTML;
     modalOverlay.removeAttribute("hidden");
-    // Trigger reflow to enable transition
     void modalOverlay.offsetWidth;
     modalOverlay.classList.add("open");
-    // Focus first input
     var firstInput = modalBody.querySelector(
       "input, select, textarea"
     );
@@ -196,9 +181,6 @@
     }
   });
 
-  // =====================
-  // SUBJECT MANAGEMENT
-  // =====================
   var subjectColors = [
     "#0d9488",
     "#2563eb",
@@ -378,7 +360,6 @@
       .join("");
   }
 
-  // Expose for inline onclick
   window._editSubject = openSubjectModal;
   window._deleteSubject = deleteSubject;
 
@@ -386,9 +367,6 @@
     openSubjectModal(null);
   });
 
-  // =====================
-  // SCHEDULE PLANNER (Today only)
-  // =====================
   var timeSlots = [];
   for (var h = 6; h <= 22; h++) {
     timeSlots.push(h);
@@ -507,7 +485,6 @@
 
     openModal("Add Study Session", body, footer);
 
-    // Default end time to start + 1
     document.getElementById("sessionStart").addEventListener("change", function() {
       var endSel = document.getElementById("sessionEnd");
       var startVal = parseInt(this.value);
@@ -536,7 +513,6 @@
 
     var date = formatDate(new Date());
 
-    // Conflict detection
     var conflict = schedule.some(function (s) {
       if (s.date !== date) return false;
       var sStart = parseInt(s.startHour);
@@ -575,9 +551,6 @@
 
   addSessionBtn.addEventListener("click", openSessionModal);
 
-  // =====================
-  // TASK MANAGER
-  // =====================
   function getTaskFormHTML() {
     var subjectOptions =
       '<option value="">No subject</option>' +
@@ -707,7 +680,6 @@
   function renderTasks() {
     var filtered = tasks;
 
-    // Sort: pending/in-progress first, then by due date
     filtered.sort(function (a, b) {
       var aComp = a.status === "completed" ? 1 : 0;
       var bComp = b.status === "completed" ? 1 : 0;
@@ -787,25 +759,19 @@
     openTaskModal();
   });
 
-  // =====================
-  // DASHBOARD
-  // =====================
   function refreshDashboard() {
-    // Stats
     statSubjects.textContent = subjects.length;
     var pendingTasks = tasks.filter(function (t) {
       return t.status !== "completed";
     });
     statTasks.textContent = pendingTasks.length;
 
-    // Today's sessions
     var today = formatDate(new Date());
     var todaySessions = schedule.filter(function (s) {
       return s.date === today;
     });
     statSessions.textContent = todaySessions.length;
 
-    // Completion rate
     var completionRate =
       tasks.length > 0
         ? Math.round(
@@ -818,7 +784,6 @@
         : 0;
     statCompletion.textContent = completionRate + "%";
 
-    // Upcoming deadlines
     var upcoming = tasks
       .filter(function (t) {
         return t.dueDate && t.status !== "completed";
@@ -864,7 +829,6 @@
         .join("");
     }
 
-    // Today's schedule
     if (todaySessions.length === 0) {
       todaySchedule.innerHTML =
         '<div class="empty-state">' +
@@ -897,7 +861,6 @@
         .join("");
     }
 
-    // Check reminders
     if (settings.reminders) {
       checkReminders();
     }
@@ -914,7 +877,6 @@
       var diff = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
       if (diff >= 0 && diff <= reminderDays) {
         var dueInfo = getDueInfo(t.dueDate);
-        // Show only once per session using sessionStorage
         var reminderKey = "reminder_" + t.id + "_" + formatDate(now);
         if (!sessionStorage.getItem(reminderKey)) {
           sessionStorage.setItem(reminderKey, "1");
@@ -929,9 +891,6 @@
     });
   }
 
-  // =====================
-  // PROGRESS ANALYTICS
-  // =====================
   function renderAnalytics() {
     renderCompletionChart();
     renderSubjectChart();
@@ -965,7 +924,6 @@
       return;
     }
 
-    // Doughnut chart
     var data = [
       { value: completed, color: "#16a34a", label: "Completed" },
       { value: inProgress, color: "#f59e0b", label: "In Progress" },
@@ -990,7 +948,6 @@
       startAngle += sliceAngle;
     });
 
-    // Center text
     ctx.fillStyle = getComputedStyle(document.documentElement)
       .getPropertyValue("--color-text")
       .trim();
@@ -1004,7 +961,6 @@
       .trim();
     ctx.fillText("Total", cx, cy + 14);
 
-    // Legend
     var legendX = w - 110;
     var legendY = h / 2 - 30;
     data.forEach(function (d, i) {
@@ -1037,7 +993,6 @@
       return;
     }
 
-    // Count tasks per subject
     var data = subjects.map(function (s) {
       var count = tasks.filter(function (t) {
         return t.subjectId === s.id;
@@ -1050,7 +1005,6 @@
     }, 0);
 
     if (total === 0) {
-      // Show subjects without tasks as equal slices
       var cx = w / 2 - 60;
       var cy = h / 2;
       var outerR = Math.min(cx, cy) - 20;
@@ -1068,7 +1022,6 @@
         startAngle += sliceAngle;
       });
 
-      // Legend
       var legendX = w - 120;
       var legendY = Math.max(20, h / 2 - (data.length * 22) / 2);
       data.forEach(function (d, i) {
@@ -1102,7 +1055,6 @@
       startAngle += sliceAngle;
     });
 
-    // Legend
     var legendX = w - 120;
     var legendY = Math.max(20, h / 2 - (data.length * 22) / 2);
     data.forEach(function (d, i) {
@@ -1119,11 +1071,7 @@
     });
   }
 
-  // =====================
-  // SETTINGS
-  // =====================
   function applySettings() {
-    // Dark mode
     if (settings.darkMode) {
       document.documentElement.setAttribute("data-theme", "dark");
       darkModeToggle.checked = true;
@@ -1147,7 +1095,6 @@
 
   themeToggleBtn.addEventListener("click", toggleTheme);
 
-  // Export
   exportDataBtn.addEventListener("click", function () {
     var exportData = {
       subjects: subjects,
@@ -1168,7 +1115,6 @@
     showToast("Data exported successfully");
   });
 
-  // Reset
   resetDataBtn.addEventListener("click", function () {
     if (
       confirm(
