@@ -14,7 +14,7 @@ header {
 nav {
   display: flex;
   justify-content: space-around;
-  background: #34495e;
+  background: #FF2400;
 }
 
 nav button {
@@ -37,3 +37,4 @@ nav button {
   background: #1e1e1e;
   color: white;
 }
+
